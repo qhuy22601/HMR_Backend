@@ -16,7 +16,7 @@ public class JwtUtil {
 
     public String generateToken(String subject){
         return Jwts.builder().setIssuer("").setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toHours(24)))
                 .signWith(SignatureAlgorithm.HS512, Base64.getEncoder().encode(secret.getBytes())).compact();
     }
 

@@ -29,6 +29,7 @@ public class AuthenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
+        System.out.println("print here");
         if(token != null){
             String userEmail = jwtUtil.getSubject(token);
             if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() ==null){

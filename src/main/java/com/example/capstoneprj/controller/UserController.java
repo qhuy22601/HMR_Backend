@@ -50,7 +50,7 @@ public class UserController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(),loginDTO.getPassword()));
             String token = util.generateToken(loginDTO.getEmail());
             Optional<UserModel> userOpt = userRepo.findByEmail(loginDTO.getEmail());
-            UserModel newUser = new UserModel();
+            UserModel newUser = userOpt.get();
             newUser.setPassword("");
             return new ResponseEntity<ResponseDTO>(new ResponseDTO("Success","Success", new AuthorizedDTO(newUser,token)), HttpStatus.OK);
         }catch (Exception e){

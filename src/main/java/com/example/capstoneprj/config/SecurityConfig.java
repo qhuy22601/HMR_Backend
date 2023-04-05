@@ -40,7 +40,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity)throws Exception{
         httpSecurity.csrf().disable().authorizeHttpRequests()
                 .antMatchers("/api/user/login", "/api/user/save").permitAll()
-                .antMatchers("/api/admin/login").hasAuthority("ADMIN")
+                .antMatchers("/api/user/getall").hasAuthority("USER")
                 .anyRequest().authenticated().and().exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

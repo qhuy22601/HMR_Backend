@@ -16,10 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -43,6 +43,7 @@ public class UserService implements UserDetailsService {
          }
          else {
              user.setPassword(encoder.encode(user.getPassword()));
+             user.setCreatedAt(LocalDate.now());
              UserModel newUser = userRepo.save(user);
              responseEntity.setStatus("Success");
              responseEntity.setMess("Success");

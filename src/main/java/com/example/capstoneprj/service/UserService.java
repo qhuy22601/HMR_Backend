@@ -15,7 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -73,5 +75,21 @@ public class UserService implements UserDetailsService {
         responseEntity.setStatus("Sucess");
         responseEntity.setPayload(userRepo.findAll());
         return responseEntity;
+    }
+
+    public ResponseDTO findUser(String email, String userName){
+        ResponseDTO responseDTO = new ResponseDTO();
+        Optional<List<UserModel>> optUser = userRepo.findByEmailLikeAndUsernameContaining(email, userName);
+        if(optUser.isEmpty()){
+            log.error("User not found");
+            responseDTO.setMess("Fail");
+            responseDTO.setStatus("Fail");
+            responseDTO.setPayload(null);
+        }else{
+            responseDTO.setMess("Success");
+            responseDTO.setStatus("Success");
+            responseDTO.setPayload(optUser);
+        }
+        return responseDTO;
     }
 }

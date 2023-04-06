@@ -7,6 +7,7 @@ import com.example.capstoneprj.domain.model.UserModel;
 import com.example.capstoneprj.repository.UserRepo;
 import com.example.capstoneprj.service.UserService;
 import com.example.capstoneprj.utils.JwtUtil;
+import com.mongodb.lang.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/auth")
 public class UserController {
 
     @Autowired
@@ -56,5 +57,9 @@ public class UserController {
         }catch (Exception e){
             return new ResponseEntity<ResponseDTO>(new ResponseDTO("Fail","Fail",null),HttpStatus.OK);
         }
+    }
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDTO> searchUser(@RequestParam @Nullable String email, @RequestParam @Nullable String username){
+        return new ResponseEntity<>(userService.findUser(email,username),HttpStatus.OK);
     }
 }

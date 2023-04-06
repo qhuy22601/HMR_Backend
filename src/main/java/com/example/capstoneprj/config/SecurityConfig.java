@@ -4,6 +4,7 @@ import com.example.capstoneprj.filter.AuthenFilter;
 import com.example.capstoneprj.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -39,8 +40,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity)throws Exception{
         httpSecurity.csrf().disable().authorizeHttpRequests()
-                .antMatchers("/api/user/login", "/api/user/save").permitAll()
-                .antMatchers("/api/user/getall").hasAuthority("USER")
+                .antMatchers("/api/auth/login", "/api/auth/save").permitAll()
+                .antMatchers("/api/auth/getall").hasAuthority("USER")
                 .anyRequest().authenticated().and().exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

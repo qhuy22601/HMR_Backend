@@ -42,7 +42,7 @@ public class SecurityConfig {
         httpSecurity.csrf().disable().authorizeHttpRequests()
                 .antMatchers("/api/auth/login", "/api/auth/save").permitAll()
                 .antMatchers("/api/auth/getall", "/api/department/getAll","/api/department/getByName").hasAuthority("USER")
-                .antMatchers("/api/department/save").hasAuthority("ADMIN")
+                .antMatchers("/api/department/save","/api/salary/save", "/api/absence/save").hasAuthority("ADMIN")
                 .anyRequest().authenticated().and().exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

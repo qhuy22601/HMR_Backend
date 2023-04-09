@@ -38,6 +38,7 @@ public class SalaryService {
             responseDTO.setStatus("Success");
             responseDTO.setMess("Success");
             responseDTO.setPayload(newSalary);
+            log.info("value of salary: " + salary.getAmount().getValue());
         }
         return responseDTO;
     }

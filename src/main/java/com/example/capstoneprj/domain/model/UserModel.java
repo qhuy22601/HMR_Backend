@@ -10,7 +10,9 @@ import javax.persistence.Enumerated;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,6 +29,8 @@ public class UserModel {
     private String username;
 
     private String password;
+
+    private LocalDate hireDate;
 
 //    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime followupDate;

@@ -1,6 +1,7 @@
 package com.example.capstoneprj.service;
 
 import com.example.capstoneprj.domain.dto.ResponseDTO;
+import com.example.capstoneprj.domain.model.Absence;
 import com.example.capstoneprj.domain.model.Role;
 import com.example.capstoneprj.domain.model.UserModel;
 import com.example.capstoneprj.repository.UserRepo;
@@ -93,4 +94,9 @@ public class UserService implements UserDetailsService {
         }
         return responseDTO;
     }
+
+//    public ResponseDTO absent(Absence absence){
+//        ResponseDTO responseDTO = new ResponseDTO();
+//
+//    }
 }

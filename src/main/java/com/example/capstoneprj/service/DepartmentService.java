@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -49,6 +50,7 @@ public class DepartmentService {
             responseDTO.setStatus("Fail");
             responseDTO.setPayload(null);
         }else{
+            department.setCreateAt(LocalDate.now());
             Department newDepartment = departmentRepo.save(department);
             responseDTO.setMess("Sucess");
             responseDTO.setStatus("Success");

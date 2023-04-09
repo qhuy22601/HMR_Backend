@@ -15,9 +15,14 @@ import java.time.LocalDate;
 public class Absence {
     @Id
     private String id;
+
+    private String userId;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate startDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endDate;
+
+    private String status;
 
 }

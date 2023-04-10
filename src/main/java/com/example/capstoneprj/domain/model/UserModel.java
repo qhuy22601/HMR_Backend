@@ -32,6 +32,8 @@ public class UserModel {
 
     private LocalDate hireDate;
 
+    private PayGrade payGrade;
+
 //    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime followupDate;
 

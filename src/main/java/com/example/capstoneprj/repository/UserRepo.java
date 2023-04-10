@@ -1,5 +1,6 @@
 package com.example.capstoneprj.repository;
 
+import com.example.capstoneprj.domain.model.PayGrade;
 import com.example.capstoneprj.domain.model.UserModel;
 import com.mongodb.lang.Nullable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -13,6 +14,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends MongoRepository<UserModel, String> {
     Optional<UserModel> findByEmail(String email);
+
+    Optional<UserModel> findByPayGrade(PayGrade payGrade);
     Optional<List<UserModel>> findByEmailLikeAndUsernameContaining(@Nullable String email,@Nullable String userName);
 //    @Query("SELECT u FROM _User u WHERE u.email LIKE CONCAT('%',:email,'%') OR u.username LIKE CONCAT('%',:username,'%')")
 //    Optional<List<UserModel>> findLikeEmailOrLikeUsername (@Param("email") String email, @Param("username") String username);

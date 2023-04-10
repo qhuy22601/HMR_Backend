@@ -21,6 +21,6 @@ public class Salary {
 
     private LocalDate date;
 
-    private String userId;
+    List<String> listUser = new ArrayList<>();
 
 }

@@ -1,6 +1,8 @@
 package com.example.capstoneprj.controller;
 
+import com.example.capstoneprj.domain.dto.Approval;
 import com.example.capstoneprj.domain.dto.ResponseDTO;
+import com.example.capstoneprj.domain.dto.Unread;
 import com.example.capstoneprj.domain.model.Absence;
 import com.example.capstoneprj.service.AbsenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +24,14 @@ public class AbsenceController {
     @PostMapping("/save")
     public ResponseEntity<ResponseDTO> save(@RequestBody Absence absence){
         return new ResponseEntity<>(absenceService.save(absence),HttpStatus.OK);
+    }
+
+    @PutMapping("/unread")
+    public ResponseEntity<ResponseDTO> unread(@RequestBody Unread unread){
+        return new ResponseEntity<>(absenceService.markReaded(unread),HttpStatus.OK);
+    }
+    @PutMapping("/approve")
+    public ResponseEntity<ResponseDTO> approve(@RequestBody Approval approval){
+        return new ResponseEntity<>(absenceService.approval(approval),HttpStatus.OK);
     }
 }

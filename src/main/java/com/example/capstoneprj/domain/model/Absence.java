@@ -25,4 +25,5 @@ public class Absence {
 
     private String status;
 
+    private boolean unread;
 }

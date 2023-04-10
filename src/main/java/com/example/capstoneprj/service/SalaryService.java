@@ -1,16 +1,12 @@
 package com.example.capstoneprj.service;
 
 import com.example.capstoneprj.domain.dto.ResponseDTO;
-import com.example.capstoneprj.domain.model.PayGrade;
 import com.example.capstoneprj.domain.model.Salary;
 import com.example.capstoneprj.domain.model.UserModel;
 import com.example.capstoneprj.repository.SalaryRepo;
 import com.example.capstoneprj.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.core.userdetails.ReactiveUserDetailsServiceResourceFactoryBean;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

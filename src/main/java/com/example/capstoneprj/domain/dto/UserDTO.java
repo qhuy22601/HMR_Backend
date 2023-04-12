@@ -7,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Unread {
-    private String absenceId;
+public class UserDTO {
+    private String userId;
 }

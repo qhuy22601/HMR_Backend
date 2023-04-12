@@ -1,12 +1,16 @@
 package com.example.capstoneprj.service;
 
 import com.example.capstoneprj.domain.dto.ResponseDTO;
+import com.example.capstoneprj.domain.dto.UserDTO;
 import com.example.capstoneprj.domain.model.Salary;
 import com.example.capstoneprj.domain.model.UserModel;
 import com.example.capstoneprj.repository.SalaryRepo;
 import com.example.capstoneprj.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -72,6 +76,27 @@ public class SalaryService {
         responseDTO.setStatus("Success");
         responseDTO.setMess("Success");
         responseDTO.setPayload(salaryRepo.findAll());
+        return responseDTO;
+    }
+
+    @Scheduled(cron = "0 0 1 * * ?")//every 1st day of month
+//    @Scheduled(cron = "0 * * * * ?") // runs every minute at the beginning of the minute
+    public ResponseDTO autoPay(){
+        autoAddListUserSalary();
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<Salary> salaryList = salaryRepo.findAll();
+        for(Salary salary: salaryList){
+
+                for (String userId : salary.getListUser()) {
+
+                    Optional<UserModel> newUser = userRepo.findById(userId);
+                    UserModel userModel = newUser.get();
+                    userModel.setBalance(userModel.getBalance() + userModel.getPayGrade().getValue());
+                    responseDTO.setStatus("Success");
+                    responseDTO.setMess("Sucess");
+                    responseDTO.setPayload(userRepo.save(userModel));
+                }
+        }
         return responseDTO;
     }
 }

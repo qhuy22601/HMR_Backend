@@ -1,6 +1,7 @@
 package com.example.capstoneprj.service;
 
 import com.example.capstoneprj.domain.dto.ResponseDTO;
+import com.example.capstoneprj.domain.dto.SignUpDTO;
 import com.example.capstoneprj.domain.model.Absence;
 import com.example.capstoneprj.domain.model.Role;
 import com.example.capstoneprj.domain.model.UserModel;
@@ -32,7 +33,11 @@ public class UserService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    public ResponseDTO save(UserModel user){
+    @Autowired
+    private SalaryService salaryService;
+
+    public ResponseDTO save(SignUpDTO user){
+         salaryService.autoAddListUserSalary();
          ResponseDTO responseEntity = new ResponseDTO();
          Optional<UserModel> userOptional = userRepo.findByEmail(user.getEmail());
          if(userOptional.isPresent()){
@@ -43,12 +48,16 @@ public class UserService implements UserDetailsService {
              return responseEntity;
          }
          else {
-             user.setPassword(encoder.encode(user.getPassword()));
-             user.setCreatedAt(LocalDate.now());
-             UserModel newUser = userRepo.save(user);
+             UserModel newUser = new UserModel();
+             newUser.setEmail(user.getEmail());
+             newUser.setPayGrade(user.getPayGrade());
+             newUser.setPassword(encoder.encode(user.getPassword()));
+             newUser.setRole(Role.USER);
+             newUser.setBalance((double) 0);
+             newUser.setCreatedAt(LocalDate.now());
              responseEntity.setStatus("Success");
              responseEntity.setMess("Success");
-             responseEntity.setPayload(newUser);
+             responseEntity.setPayload(userRepo.save(newUser));
              return responseEntity;
          }
     }

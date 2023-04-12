@@ -32,6 +32,16 @@ public class UserModel {
 
     private LocalDate hireDate;
 
+    private String gender;
+
+    private String phoneNumber;
+
+    private String address;
+
+    private String image;
+
+    private Double balance;
+
     private PayGrade payGrade;
 
 //    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")

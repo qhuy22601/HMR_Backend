@@ -26,4 +26,9 @@ public class SalaryController {
     public ResponseEntity<ResponseDTO> save(@RequestBody Salary salary){
         return new ResponseEntity<>(salaryService.save(salary),HttpStatus.OK);
     }
+
+    @PostMapping("/autopay")
+    public ResponseEntity<ResponseDTO> autoPay(){
+        return new ResponseEntity<>(salaryService.autoPay(),HttpStatus.OK);
+    }
 }

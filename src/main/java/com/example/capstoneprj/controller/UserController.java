@@ -3,6 +3,7 @@ package com.example.capstoneprj.controller;
 import com.example.capstoneprj.domain.dto.AuthorizedDTO;
 import com.example.capstoneprj.domain.dto.LoginDTO;
 import com.example.capstoneprj.domain.dto.ResponseDTO;
+import com.example.capstoneprj.domain.dto.SignUpDTO;
 import com.example.capstoneprj.domain.model.UserModel;
 import com.example.capstoneprj.repository.UserRepo;
 import com.example.capstoneprj.service.UserService;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ResponseDTO> save(@RequestBody UserModel user){
+    public ResponseEntity<ResponseDTO> save(@RequestBody SignUpDTO user){
         return new ResponseEntity<>(userService.save(user),HttpStatus.OK);
     }
 

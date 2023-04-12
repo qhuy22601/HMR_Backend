@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +24,7 @@ public class AbsenceService {
         responseDTO.setMess("Success");
         responseDTO.setStatus("Success");
         responseDTO.setPayload(absenceRepo.findAll());
+        log.info(String.valueOf(unreadCount()));
         return responseDTO;
     }
 
@@ -75,6 +77,13 @@ public class AbsenceService {
             responseDTO.setPayload(absenceRepo.save(ab));
         }
         return responseDTO;
+    }
+
+    public int unreadCount(){
+       List<Absence> absenceOpt = absenceRepo.findByUnreadTrue();
+
+       int cnt = absenceOpt.size();
+       return cnt;
     }
 }
 

@@ -30,8 +30,13 @@ public class AbsenceController {
     public ResponseEntity<ResponseDTO> unread(@RequestBody Unread unread){
         return new ResponseEntity<>(absenceService.markReaded(unread),HttpStatus.OK);
     }
-    @PutMapping("/approve")
-    public ResponseEntity<ResponseDTO> approve(@RequestBody Approval approval){
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<ResponseDTO> approve(@PathVariable("id") Approval approval){
         return new ResponseEntity<>(absenceService.approval(approval),HttpStatus.OK);
+    }
+
+    @GetMapping("/count-unread")
+    public ResponseEntity<Integer> countUnread(){
+        return new ResponseEntity<>(absenceService.unreadCount(),HttpStatus.OK);
     }
 }

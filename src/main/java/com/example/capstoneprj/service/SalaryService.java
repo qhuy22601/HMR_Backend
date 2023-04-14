@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.SchedulingConfigurer;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ScheduledFuture;
 
 @Service
 @Slf4j
@@ -26,7 +29,6 @@ public class SalaryService {
 
     @Autowired
     private UserRepo userRepo;
-
 
 
     public ResponseDTO save(Salary salary){
@@ -71,7 +73,6 @@ public class SalaryService {
 
     }
     public ResponseDTO getAll(){
-        autoAddListUserSalary();
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setStatus("Success");
         responseDTO.setMess("Success");
@@ -79,24 +80,22 @@ public class SalaryService {
         return responseDTO;
     }
 
-    @Scheduled(cron = "0 0 1 * * ?")//every 1st day of month
+//    @Scheduled(cron = "0 0 1 * * ?")//every 1st day of month
 //    @Scheduled(cron = "0 * * * * ?") // runs every minute at the beginning of the minute
-    public ResponseDTO autoPay(){
-        autoAddListUserSalary();
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<Salary> salaryList = salaryRepo.findAll();
-        for(Salary salary: salaryList){
+//    public ResponseDTO autoPay(){
+//        ResponseDTO responseDTO = new ResponseDTO();
+//        List<Salary> salaryList = salaryRepo.findAll();
+//        for(Salary salary: salaryList){
+//                for (String userId : salary.getListUser()) {
+//                    Optional<UserModel> newUser = userRepo.findById(userId);
+//                    UserModel userModel = newUser.get();
+//                    userModel.setBalance(userModel.getBalance() + userModel.getPayGrade().getValue());
+//                    responseDTO.setStatus("Success");
+//                    responseDTO.setMess("Sucess");
+//                    responseDTO.setPayload(userRepo.save(userModel));
+//                }
+//        }
+//        return responseDTO;
+//    }
 
-                for (String userId : salary.getListUser()) {
-
-                    Optional<UserModel> newUser = userRepo.findById(userId);
-                    UserModel userModel = newUser.get();
-                    userModel.setBalance(userModel.getBalance() + userModel.getPayGrade().getValue());
-                    responseDTO.setStatus("Success");
-                    responseDTO.setMess("Sucess");
-                    responseDTO.setPayload(userRepo.save(userModel));
-                }
-        }
-        return responseDTO;
-    }
 }

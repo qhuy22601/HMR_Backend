@@ -3,6 +3,7 @@ package com.example.capstoneprj.controller;
 import com.example.capstoneprj.domain.dto.ResponseDTO;
 import com.example.capstoneprj.domain.model.Salary;
 import com.example.capstoneprj.service.SalaryService;
+import com.example.capstoneprj.service.ScheduleConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ public class SalaryController {
     @Autowired
     private SalaryService salaryService;
 
+    @Autowired
+    private ScheduleConfig scheduleConfig;
+
     @GetMapping("/getall")
     public ResponseEntity<ResponseDTO> getall(){
         return new ResponseEntity<>(salaryService.getAll(), HttpStatus.OK);
@@ -28,7 +32,18 @@ public class SalaryController {
     }
 
     @PostMapping("/autopay")
-    public ResponseEntity<ResponseDTO> autoPay(){
-        return new ResponseEntity<>(salaryService.autoPay(),HttpStatus.OK);
+    public ResponseEntity<String> autoPay(){
+        scheduleConfig.enableAutoPaySalary();
+        return ResponseEntity.ok("Auto pay salary has been enabled");
     }
+    @PostMapping("/stopautopay")
+    public ResponseEntity<String> StopAutoPay(){
+        scheduleConfig.disableAutoPaySalary();
+        return ResponseEntity.ok("Auto pay salary has been disabled");
+    }
+//    @PostMapping("/test")
+//    public ResponseEntity<ResponseDTO> test(){
+//        return new ResponseEntity<>(salaryService.autoPay(), HttpStatus.OK);
+//    }
+
 }

@@ -1,9 +1,6 @@
 package com.example.capstoneprj.controller;
 
-import com.example.capstoneprj.domain.dto.AuthorizedDTO;
-import com.example.capstoneprj.domain.dto.LoginDTO;
-import com.example.capstoneprj.domain.dto.ResponseDTO;
-import com.example.capstoneprj.domain.dto.SignUpDTO;
+import com.example.capstoneprj.domain.dto.*;
 import com.example.capstoneprj.domain.model.UserModel;
 import com.example.capstoneprj.repository.UserRepo;
 import com.example.capstoneprj.service.UserService;
@@ -42,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ResponseDTO> save(@RequestBody SignUpDTO user){
+    public ResponseEntity<ResponseDTO> save(@RequestBody SignUpDTO   user){
         return new ResponseEntity<>(userService.save(user),HttpStatus.OK);
     }
 
@@ -62,5 +59,10 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<ResponseDTO> searchUser(@RequestParam @Nullable String email, @RequestParam @Nullable String username){
         return new ResponseEntity<>(userService.findUser(email,username),HttpStatus.OK);
+    }
+
+    @PostMapping("/changename")
+    public ResponseEntity<ResponseDTO> change(@RequestBody NameDTO nameDTO){
+        return new ResponseEntity<>(userService.changeUserName(nameDTO),HttpStatus.OK);
     }
 }

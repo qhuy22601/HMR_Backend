@@ -1,5 +1,6 @@
 package com.example.capstoneprj.service;
 
+import com.example.capstoneprj.domain.dto.NameDTO;
 import com.example.capstoneprj.domain.dto.ResponseDTO;
 import com.example.capstoneprj.domain.dto.SignUpDTO;
 import com.example.capstoneprj.domain.model.Absence;
@@ -51,8 +52,9 @@ public class UserService implements UserDetailsService {
              UserModel newUser = new UserModel();
              newUser.setEmail(user.getEmail());
              newUser.setPayGrade(user.getPayGrade());
+             newUser.setUsername(user.getUsername());
              newUser.setPassword(encoder.encode(user.getPassword()));
-             newUser.setRole(Role.USER);
+             newUser.setRole(user.getRole());
              newUser.setBalance((double) 0);
              newUser.setCreatedAt(LocalDate.now());
              responseEntity.setStatus("Success");
@@ -82,8 +84,8 @@ public class UserService implements UserDetailsService {
 
     public ResponseDTO getAll() {
         ResponseDTO responseEntity = new ResponseDTO();
-        responseEntity.setMess("Sucess");
-        responseEntity.setStatus("Sucess");
+        responseEntity.setMess("Success");
+        responseEntity.setStatus("Success");
         responseEntity.setPayload(userRepo.findAll());
         return responseEntity;
     }
@@ -100,6 +102,24 @@ public class UserService implements UserDetailsService {
             responseDTO.setMess("Success");
             responseDTO.setStatus("Success");
             responseDTO.setPayload(optUser);
+        }
+        return responseDTO;
+    }
+
+    public ResponseDTO changeUserName(NameDTO nameDto){
+        ResponseDTO responseDTO = new ResponseDTO();
+        Optional<UserModel> userOpt = userRepo.findById(nameDto.getId());
+        if(userOpt.isEmpty()){
+            log.error("User not found");
+            responseDTO.setMess("Fail");
+            responseDTO.setStatus("Fail");
+            responseDTO.setPayload(null);
+        }else{
+            UserModel newUser = userOpt.get();
+            newUser.setUsername(nameDto.getUsername());
+            responseDTO.setMess("Success");
+            responseDTO.setStatus("Success");
+            responseDTO.setPayload(userRepo.save(newUser));
         }
         return responseDTO;
     }

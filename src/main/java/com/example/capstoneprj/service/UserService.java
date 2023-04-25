@@ -124,8 +124,25 @@ public class UserService implements UserDetailsService {
         return responseDTO;
     }
 
-//    public ResponseDTO absent(Absence absence){
-//        ResponseDTO responseDTO = new ResponseDTO();
-//
-//    }
+    public ResponseDTO changeInfo(UserModel userModel){
+        ResponseDTO responseDTO = new ResponseDTO();
+        Optional<UserModel> userOpt = userRepo.findById(userModel.getId());
+        if(userOpt.isEmpty()){
+            log.error("User not found");
+            responseDTO.setMess("Fail");
+            responseDTO.setStatus("Fail");
+            responseDTO.setPayload(null);
+        }else{
+            UserModel newUser = userOpt.get();
+            newUser.setUsername(userModel.getUsername());
+            newUser.setAddress(userModel.getAddress());
+            newUser.setImage(userModel.getImage());
+            newUser.setPassword(encoder.encode(userModel.getPassword()));
+            newUser.setPhoneNumber(userModel.getPhoneNumber());
+            responseDTO.setMess("Success");
+            responseDTO.setStatus("Success");
+            responseDTO.setPayload(userRepo.save(newUser));
+        }
+        return responseDTO;
+    }
 }

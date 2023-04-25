@@ -85,5 +85,21 @@ public class AbsenceService {
        int cnt = absenceOpt.size();
        return cnt;
     }
+
+    public ResponseDTO getUnRead(){
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<Absence> unreadAbs = absenceRepo.findByUnreadTrue();
+        if(unreadAbs.size()>0){
+            responseDTO.setMess("Success");
+            responseDTO.setStatus("Success");
+            responseDTO.setPayload(unreadAbs);
+        }else{
+            log.error("Absence not found");
+            responseDTO.setStatus("Fail");
+            responseDTO.setMess("Fail");
+            responseDTO.setPayload(null);
+        }
+        return responseDTO;
+    }
 }
 

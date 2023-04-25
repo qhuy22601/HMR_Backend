@@ -39,4 +39,8 @@ public class AbsenceController {
     public ResponseEntity<Integer> countUnread(){
         return new ResponseEntity<>(absenceService.unreadCount(),HttpStatus.OK);
     }
+    @GetMapping("/notif")
+    public ResponseEntity<ResponseDTO> notif(){
+        return new ResponseEntity<>(absenceService.getUnRead(),HttpStatus.OK);
+    }
 }

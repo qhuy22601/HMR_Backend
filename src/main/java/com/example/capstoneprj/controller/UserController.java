@@ -50,7 +50,7 @@ public class UserController {
             String token = util.generateToken(loginDTO.getEmail());
             Optional<UserModel> userOpt = userRepo.findByEmail(loginDTO.getEmail());
             UserModel newUser = userOpt.get();
-            newUser.setPassword("");
+//            newUser.setPassword("");
             return new ResponseEntity<ResponseDTO>(new ResponseDTO("Success","Success", new AuthorizedDTO(newUser,token)), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<ResponseDTO>(new ResponseDTO("Fail","Fail",null),HttpStatus.OK);
@@ -61,8 +61,8 @@ public class UserController {
         return new ResponseEntity<>(userService.findUser(email,username),HttpStatus.OK);
     }
 
-    @PostMapping("/changename")
-    public ResponseEntity<ResponseDTO> change(@RequestBody NameDTO nameDTO){
-        return new ResponseEntity<>(userService.changeUserName(nameDTO),HttpStatus.OK);
+    @PostMapping("/change")
+    public ResponseEntity<ResponseDTO> change(@RequestBody UserModel userModel){
+        return new ResponseEntity<>(userService.changeInfo(userModel),HttpStatus.OK);
     }
 }

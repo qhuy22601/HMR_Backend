@@ -18,10 +18,16 @@ public class Absence {
 
     private String userId;
 
+    private String userName;
+
+    private String image;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate startDate;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endDate;
+
+    private String reason;
 
     private String status;
 

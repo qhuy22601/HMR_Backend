@@ -6,6 +6,7 @@ import com.example.capstoneprj.domain.dto.SignUpDTO;
 import com.example.capstoneprj.domain.model.Absence;
 import com.example.capstoneprj.domain.model.Role;
 import com.example.capstoneprj.domain.model.UserModel;
+import com.example.capstoneprj.exception.JwtExpiredException;
 import com.example.capstoneprj.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
 import java.time.Instant;
@@ -65,12 +67,14 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<UserModel> user = userRepo.findByEmail(email);
         User springUser = null;
         if(user.isEmpty()){
             log.error("User not found" + user.get());
-            throw new UsernameNotFoundException("User not found "+email);
+            return null;
+//            throw new UsernameNotFoundException("User not found "+email);
         }
         else{
             UserModel newUser = user.get();
@@ -124,6 +128,8 @@ public class UserService implements UserDetailsService {
         return responseDTO;
     }
 
+
+    ///////check if password =="" user.getpassword..
     public ResponseDTO changeInfo(UserModel userModel){
         ResponseDTO responseDTO = new ResponseDTO();
         Optional<UserModel> userOpt = userRepo.findById(userModel.getId());

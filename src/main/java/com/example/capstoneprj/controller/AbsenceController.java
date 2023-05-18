@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.YearMonth;
+
 @RestController
 @RequestMapping("/api/absence")
 public class AbsenceController {
@@ -27,8 +29,8 @@ public class AbsenceController {
     }
 
     @PutMapping("/unread")
-    public ResponseEntity<ResponseDTO> unread(@RequestBody Unread unread){
-        return new ResponseEntity<>(absenceService.markReaded(unread),HttpStatus.OK);
+    public ResponseEntity<ResponseDTO> unread(){
+        return new ResponseEntity<>(absenceService.markReaded(),HttpStatus.OK);
     }
     @PutMapping("/approve/{id}")
     public ResponseEntity<ResponseDTO> approve(@PathVariable("id") Approval approval){
@@ -42,5 +44,15 @@ public class AbsenceController {
     @GetMapping("/notif")
     public ResponseEntity<ResponseDTO> notif(){
         return new ResponseEntity<>(absenceService.getUnRead(),HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/count")
+    public ResponseEntity<Integer> countDaysOffByUserIdAndMonth(
+            @PathVariable String userId,
+            @RequestParam int year,
+            @RequestParam int month) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        int totalDaysOff = absenceService.countDaysOffByUserId(userId, yearMonth);
+        return ResponseEntity.ok(totalDaysOff);
     }
 }

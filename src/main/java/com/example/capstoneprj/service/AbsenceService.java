@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,20 +70,22 @@ public class AbsenceService {
         return responseDTO;
     }
 
-    public ResponseDTO markReaded(Unread absence){
+    public ResponseDTO markReaded(){
         ResponseDTO responseDTO = new ResponseDTO();
-        Optional<Absence> absenceOpt = absenceRepo.findById(absence.getAbsenceId());
-        if(absenceOpt.isEmpty()) {
+        List<Absence> listAbs = absenceRepo.findByUnreadTrue();
+        if(listAbs.size()<1) {
             log.error("Absence not found");
             responseDTO.setStatus("Fail");
             responseDTO.setMess("Fail");
             responseDTO.setPayload(null);
         }else{
-            Absence ab = absenceOpt.get();
-            ab.setUnread(false);
-            responseDTO.setStatus("Success");
-            responseDTO.setMess("Success");
-            responseDTO.setPayload(absenceRepo.save(ab));
+            for(Absence ab : listAbs){
+                ab.setUnread(false);
+                responseDTO.setStatus("Success");
+                responseDTO.setMess("Success");
+                responseDTO.setPayload(absenceRepo.save(ab));
+            }
+
         }
         return responseDTO;
     }
@@ -124,6 +128,37 @@ public class AbsenceService {
             responseDTO.setMess("Fail");
             responseDTO.setPayload(null);
         }
+        return responseDTO;
+    }
+
+    public int countDaysOffByUserId(String userId, YearMonth yearMonth) {
+        List<Absence> leaves = absenceRepo.findByUserId(userId);
+
+        int totalDaysOff = 0;
+
+        for (Absence leave : leaves) {
+            LocalDate startDate = leave.getStartDate();
+            LocalDate endDate = leave.getEndDate();
+
+            YearMonth leaveYearMonth = YearMonth.from(startDate);
+
+            if (leaveYearMonth.equals(yearMonth)) {
+                int daysOffInMonth = calculateDaysOffInMonth(startDate, endDate, yearMonth);
+                totalDaysOff += daysOffInMonth;
+            }
+        }
+        return totalDaysOff;
+    }
+
+    public int calculateDaysOffInMonth(LocalDate startDate, LocalDate endDate, YearMonth yearMonth) {
+        int startDay = Math.max(startDate.getDayOfMonth(), 1);
+        int endDay = Math.min(endDate.getDayOfMonth(), yearMonth.lengthOfMonth());
+        return endDay - startDay + 1;
+    }
+
+
+    public ResponseDTO fukoff(){
+        ResponseDTO responseDTO = new ResponseDTO();
         return responseDTO;
     }
 }

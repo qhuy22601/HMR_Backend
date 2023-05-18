@@ -66,4 +66,8 @@ public class UserController {
     public ResponseEntity<ResponseDTO> change(@RequestBody UserModel userModel){
         return new ResponseEntity<>(userService.changeInfo(userModel),HttpStatus.OK);
     }
+    @PostMapping("/changename")
+    public ResponseEntity<ResponseDTO> changeName(@RequestBody NameDTO nameDTO){
+        return new ResponseEntity<>(userService.changeUserName(nameDTO),HttpStatus.OK);
+    }
 }

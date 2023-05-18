@@ -16,5 +16,6 @@ public interface AbsenceRepo extends MongoRepository<Absence, String> {
 
     List<Absence> findByUnreadTrue();
 
+    List<Absence> findByUserId(String id);
 
 }

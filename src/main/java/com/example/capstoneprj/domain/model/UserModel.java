@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Document(collection = "_User")
+@Document(collection = "users")
 public class UserModel {
     @Id
     private String id;

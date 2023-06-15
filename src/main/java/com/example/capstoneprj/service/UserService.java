@@ -1,8 +1,6 @@
 package com.example.capstoneprj.service;
 
-import com.example.capstoneprj.domain.dto.NameDTO;
-import com.example.capstoneprj.domain.dto.ResponseDTO;
-import com.example.capstoneprj.domain.dto.SignUpDTO;
+import com.example.capstoneprj.domain.dto.*;
 import com.example.capstoneprj.domain.model.Absence;
 import com.example.capstoneprj.domain.model.Role;
 import com.example.capstoneprj.domain.model.UserModel;
@@ -24,7 +22,9 @@ import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -54,9 +54,14 @@ public class UserService implements UserDetailsService {
              UserModel newUser = new UserModel();
              newUser.setEmail(user.getEmail());
              newUser.setPayGrade(user.getPayGrade());
-             newUser.setUsername(user.getUsername());
+             newUser.setFirstName(user.getFirstName());
+             newUser.setLastName(user.getLastName());
+//             newUser.setDepartment(user.getDepartment());
              newUser.setPassword(encoder.encode(user.getPassword()));
              newUser.setRole(user.getRole());
+             newUser.setImage(user.getImage());
+             newUser.setGender(user.getGender());
+             newUser.setBirthDate(user.getBirthDate());
              newUser.setBalance((double) 0);
              newUser.setCreatedAt(LocalDate.now());
              responseEntity.setStatus("Success");
@@ -64,6 +69,37 @@ public class UserService implements UserDetailsService {
              responseEntity.setPayload(userRepo.save(newUser));
              return responseEntity;
          }
+    }
+
+
+    public List<UserModel> getUserBorn(){
+        Month currentMonth = LocalDate.now().getMonth();
+        LocalDate currentDate = LocalDate.now();
+        List<UserModel> allUsers = userRepo.findAll();
+        List<UserModel> getUserBornCurrentMonth = allUsers
+                .stream()
+//                .filter(user -> user.getBirthDate().getMonth() == currentMonth)
+//                .filter(user -> {
+//                    LocalDate birthDate = user.getBirthDate();
+//                    return birthDate != null && birthDate.getMonth() == currentMonth;
+//                })
+                .filter(user -> {
+                    LocalDate birthDate = user.getBirthDate();
+                    return birthDate != null && birthDate.getMonth() == currentDate.getMonth()
+                            && birthDate.getDayOfMonth() >= currentDate.getDayOfMonth();
+                })
+                .collect(Collectors.toList());
+        return getUserBornCurrentMonth;
+    }
+
+    public UserModel findById(UserDTO userDTO){
+//        return userRepo.findById(userDTO.getUserId());
+        Optional<UserModel> userModel = userRepo.findById(userDTO.getUserId());
+        if(userModel.isEmpty()){
+            return null;
+        }else{
+            return userModel.get();
+        }
     }
 
     @Override
@@ -96,7 +132,7 @@ public class UserService implements UserDetailsService {
 
     public ResponseDTO findUser(String email, String userName){
         ResponseDTO responseDTO = new ResponseDTO();
-        Optional<List<UserModel>> optUser = userRepo.findByEmailLikeAndUsernameContaining(email, userName);
+        Optional<List<UserModel>> optUser = userRepo.findByEmailLikeAndLastNameContaining(email, userName);
         if(optUser.isEmpty()){
             log.error("User not found");
             responseDTO.setMess("Fail");
@@ -110,27 +146,27 @@ public class UserService implements UserDetailsService {
         return responseDTO;
     }
 
-    public ResponseDTO changeUserName(NameDTO nameDto){
-        ResponseDTO responseDTO = new ResponseDTO();
-        Optional<UserModel> userOpt = userRepo.findById(nameDto.getId());
-        if(userOpt.isEmpty()){
-            log.error("User not found");
-            responseDTO.setMess("Fail");
-            responseDTO.setStatus("Fail");
-            responseDTO.setPayload(null);
-        }else{
-            UserModel newUser = userOpt.get();
-            newUser.setUsername(nameDto.getUsername());
-            responseDTO.setMess("Success");
-            responseDTO.setStatus("Success");
-            responseDTO.setPayload(userRepo.save(newUser));
-        }
-        return responseDTO;
-    }
+//    public ResponseDTO changeUserName(NameDTO nameDto){
+//        ResponseDTO responseDTO = new ResponseDTO();
+//        Optional<UserModel> userOpt = userRepo.findById(nameDto.getId());
+//        if(userOpt.isEmpty()){
+//            log.error("User not found");
+//            responseDTO.setMess("Fail");
+//            responseDTO.setStatus("Fail");
+//            responseDTO.setPayload(null);
+//        }else{
+//            UserModel newUser = userOpt.get();
+//            newUser.setUsername(nameDto.getUsername());
+//            responseDTO.setMess("Success");
+//            responseDTO.setStatus("Success");
+//            responseDTO.setPayload(userRepo.save(newUser));
+//        }
+//        return responseDTO;
+//    }
 
 
     ///////check if password =="" user.getpassword..
-    public ResponseDTO changeInfo(UserModel userModel){
+    public ResponseDTO changeInfo(BasicInfo userModel){
         ResponseDTO responseDTO = new ResponseDTO();
         Optional<UserModel> userOpt = userRepo.findById(userModel.getId());
         if(userOpt.isEmpty()){
@@ -140,15 +176,48 @@ public class UserService implements UserDetailsService {
             responseDTO.setPayload(null);
         }else{
             UserModel newUser = userOpt.get();
-            newUser.setUsername(userModel.getUsername());
+            newUser.setFirstName(userModel.getFirstName());
+            newUser.setLastName(userModel.getLastName());
             newUser.setAddress(userModel.getAddress());
             newUser.setImage(userModel.getImage());
-            newUser.setPassword(encoder.encode(userModel.getPassword()));
+//            newUser.setPassword(encoder.encode(userModel.getPassword()));
             newUser.setPhoneNumber(userModel.getPhoneNumber());
             responseDTO.setMess("Success");
             responseDTO.setStatus("Success");
             responseDTO.setPayload(userRepo.save(newUser));
         }
         return responseDTO;
+    }
+
+    public UserModel changePassword(PasswordDTO passwordDTO){
+        Optional<UserModel> userModelOpt = userRepo.findById(passwordDTO.getId());
+        if(userModelOpt.isEmpty()){
+            return null;
+        }else{
+            UserModel user = userModelOpt.get();
+            user.setPassword(encoder.encode(passwordDTO.getPassword()));
+            userRepo.save(user);
+            return user;
+        }
+    }
+
+    public UserModel changeAll(NameDTO nameDTO){
+        Optional<UserModel> userModelOpt = userRepo.findById(nameDTO.getId());
+        if(userModelOpt.isEmpty()){
+            return null;
+        }else{
+            UserModel user = userModelOpt.get();
+            user.setPassword(encoder.encode(nameDTO.getPassword()));
+            user.setFirstName(nameDTO.getFirstName());
+            user.setLastName(nameDTO.getLastName());
+            user.setAddress(nameDTO.getAddress());
+            user.setPhoneNumber(nameDTO.getPhoneNumber());
+            user.setBirthDate(LocalDate.parse(nameDTO.getBirthDate()));
+            user.setGender(nameDTO.getGender());
+            user.setPayGrade(nameDTO.getPayGrade());
+            user.setRole(nameDTO.getRole());
+            userRepo.save(user);
+            return user;
+        }
     }
 }

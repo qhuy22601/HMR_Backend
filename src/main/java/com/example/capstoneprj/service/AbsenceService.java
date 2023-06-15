@@ -1,9 +1,7 @@
 package com.example.capstoneprj.service;
 
 
-import com.example.capstoneprj.domain.dto.Approval;
-import com.example.capstoneprj.domain.dto.ResponseDTO;
-import com.example.capstoneprj.domain.dto.Unread;
+import com.example.capstoneprj.domain.dto.*;
 import com.example.capstoneprj.domain.model.Absence;
 import com.example.capstoneprj.domain.model.UserModel;
 import com.example.capstoneprj.repository.AbsenceRepo;
@@ -55,12 +53,22 @@ public class AbsenceService {
         ResponseDTO responseDTO = new ResponseDTO();
         Optional<UserModel> useropt = userRepo.findById(absence.getUserId());
 //        Optional<Absence> absenceOpt = absenceRepo.findByAbsenceDateBetween(absence.getStartDate(), absence.getEndDate());
+        UserModel newUser = useropt.orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserModel newUser = useropt.get();
+        // Check if there is an existing absence for the same start and end dates
+        boolean hasExistingAbsence = absenceRepo.existsByStartDateAndEndDate(absence.getStartDate(), absence.getEndDate());
+
+        if (hasExistingAbsence) {
+            responseDTO.setMess("Fail");
+            responseDTO.setStatus("Fail");
+            responseDTO.setPayload(null);
+            return responseDTO;
+        }
+//        UserModel newUser = useropt.get();
         //check if current startDate is great than endDate in database =>true
         absence.setUnread(true);
         absence.setStatus("Requested");
-        absence.setUserName(newUser.getUsername());
+        absence.setLastName(newUser.getLastName());
         absence.setImage(newUser.getImage());
         Absence newAbsence = absenceRepo.save(absence);
         responseDTO.setMess("Success");
@@ -68,6 +76,24 @@ public class AbsenceService {
         responseDTO.setPayload(newAbsence);
 
         return responseDTO;
+    }
+
+    public void dayOff(UserDTO id){
+        Optional<UserModel> useropt = userRepo.findById(id.getUserId());
+        UserModel newUser = useropt.get();
+        boolean hasExistingAbsence = absenceRepo.existsByStartDateAndEndDate(LocalDate.now(), LocalDate.now());
+        if(hasExistingAbsence){
+            return;
+        }
+        Absence absence = new Absence();
+        absence.setUnread(true);
+        absence.setStatus("Requested");
+        absence.setStartDate(LocalDate.now());
+        absence.setEndDate(LocalDate.now());
+        absence.setLastName(newUser.getLastName());
+        absence.setImage(newUser.getImage());
+        absence.setReason("ko lam quiz");
+        absenceRepo.save(absence);
     }
 
     public ResponseDTO markReaded(){
@@ -156,10 +182,14 @@ public class AbsenceService {
         return endDay - startDay + 1;
     }
 
-
-    public ResponseDTO fukoff(){
-        ResponseDTO responseDTO = new ResponseDTO();
-        return responseDTO;
+    public void del(IdDTO id){
+        Optional<Absence> absence = absenceRepo.findById(id.getId());
+        if(absence.isEmpty()){
+            throw new RuntimeException("ko co ");
+        }else{
+            absenceRepo.delete(absence.get());
+        }
     }
+
 }
 

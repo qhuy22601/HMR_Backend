@@ -40,8 +40,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity)throws Exception{
         httpSecurity.csrf().disable().authorizeHttpRequests()
-                .antMatchers("/api/auth/login", "/api/auth/save","/api/auth/getall","/api/salary/getall","/api/chat/*", "/*","/api/**","/ws/**  ").permitAll()
-                .antMatchers("/api/auth/getall", "/api/department/getAll","/api/department/getByName").hasAuthority("USER")
+                .antMatchers("/api/auth/login", "/api/auth/save","/api/auth/getall","/api/salary/getall","/api/attendance/**", "/*","/api/**").permitAll()
+                .antMatchers( "/api/department/getAll","/api/department/getByName").hasAuthority("USER")
                 .antMatchers("/api/department/save","/api/salary/save", "/api/absence/save").hasAuthority("ADMIN")
                 .anyRequest().authenticated().and().exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint).and().sessionManagement()

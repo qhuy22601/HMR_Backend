@@ -19,5 +19,5 @@ public class Attendance {
     private String userId;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
-    private AttendanceStatus status;
+    private Boolean isCheckin;
 }

@@ -1,8 +1,6 @@
 package com.example.capstoneprj.controller;
 
-import com.example.capstoneprj.domain.dto.Approval;
-import com.example.capstoneprj.domain.dto.ResponseDTO;
-import com.example.capstoneprj.domain.dto.Unread;
+import com.example.capstoneprj.domain.dto.*;
 import com.example.capstoneprj.domain.model.Absence;
 import com.example.capstoneprj.service.AbsenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +52,18 @@ public class AbsenceController {
         YearMonth yearMonth = YearMonth.of(year, month);
         int totalDaysOff = absenceService.countDaysOffByUserId(userId, yearMonth);
         return ResponseEntity.ok(totalDaysOff);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<String> getoff(@PathVariable("id")UserDTO userDTO){
+        absenceService.dayOff(userDTO);
+        return new ResponseEntity<>("okkkk",HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> del(@PathVariable("id")IdDTO idDTO){
+        absenceService.del(idDTO);
+        return new ResponseEntity<>("okkkk",HttpStatus.OK);
+
     }
 }

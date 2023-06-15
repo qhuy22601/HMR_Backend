@@ -16,7 +16,7 @@ public interface UserRepo extends MongoRepository<UserModel, String> {
     Optional<UserModel> findByEmail(String email);
 
     Optional<UserModel> findByPayGrade(PayGrade payGrade);
-    Optional<List<UserModel>> findByEmailLikeAndUsernameContaining(@Nullable String email,@Nullable String userName);
+    Optional<List<UserModel>> findByEmailLikeAndLastNameContaining(@Nullable String email,@Nullable String lastName);
 //    @Query("SELECT u FROM _User u WHERE u.email LIKE CONCAT('%',:email,'%') OR u.username LIKE CONCAT('%',:username,'%')")
 //    Optional<List<UserModel>> findLikeEmailOrLikeUsername (@Param("email") String email, @Param("username") String username);
 }

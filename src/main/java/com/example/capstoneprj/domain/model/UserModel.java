@@ -26,11 +26,15 @@ public class UserModel {
 
     private String email;
 
-    private String username;
+    private String firstName;
+
+    private String lastName;
+
+    private LocalDate birthDate;
+
+    private Department department;
 
     private String password;
-
-    private LocalDate hireDate;
 
     private String gender;
 

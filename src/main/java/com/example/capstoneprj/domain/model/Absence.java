@@ -18,7 +18,7 @@ public class Absence {
 
     private String userId;
 
-    private String userName;
+    private String lastName;
 
     private String image;
 

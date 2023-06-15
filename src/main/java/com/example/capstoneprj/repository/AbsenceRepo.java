@@ -18,4 +18,5 @@ public interface AbsenceRepo extends MongoRepository<Absence, String> {
 
     List<Absence> findByUserId(String id);
 
+    boolean existsByStartDateAndEndDate(LocalDate startDate, LocalDate endDate);
 }

@@ -182,6 +182,8 @@ public class UserService implements UserDetailsService {
             newUser.setImage(userModel.getImage());
 //            newUser.setPassword(encoder.encode(userModel.getPassword()));
             newUser.setPhoneNumber(userModel.getPhoneNumber());
+	    newUser.setBirthDate(userModel.getBirthDate());
+            newUser.setGender(userModel.getGender());
             responseDTO.setMess("Success");
             responseDTO.setStatus("Success");
             responseDTO.setPayload(userRepo.save(newUser));
@@ -199,6 +201,23 @@ public class UserService implements UserDetailsService {
             userRepo.save(user);
             return user;
         }
+    }
+
+
+    public ResponseDTO searchUser(String email, String firstName, String lastName){
+        ResponseDTO responseDTO = new ResponseDTO();
+        Optional<List<UserModel>> optUser = userRepo.findByEmailLikeOrLastNameContainingOrFirstNameContaining(email, firstName, lastName);
+        if(optUser.isEmpty()){
+            log.error("User not found");
+            responseDTO.setMess("Fail");
+            responseDTO.setStatus("Fail");
+            responseDTO.setPayload(null);
+        }else{
+            responseDTO.setMess("Success");
+            responseDTO.setStatus("Success");
+            responseDTO.setPayload(optUser);
+        }
+        return responseDTO;
     }
 
     public UserModel changeAll(NameDTO nameDTO){

@@ -127,6 +127,7 @@ public class AbsenceService {
         }else{
             Absence ab = absenceOpt.get();
             ab.setStatus("Approved");
+	    ab.setUnread(false);
             responseDTO.setStatus("Success");
             responseDTO.setMess("Success");
             responseDTO.setPayload(absenceRepo.save(ab));

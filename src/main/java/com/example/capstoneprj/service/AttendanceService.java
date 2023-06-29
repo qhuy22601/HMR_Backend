@@ -9,7 +9,9 @@ import com.example.capstoneprj.exception.AttendanceNotFound;
 import com.example.capstoneprj.repository.AttendanceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.time.YearMonth;
+import java.util.Collections;
+import java.time.temporal.ChronoUnit;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -65,6 +67,28 @@ public class AttendanceService {
     public List<Attendance> getAttendanceByUserId(String idDTO){
         List<Attendance> list = attendanceRepo.findAttendanceByUserId(idDTO);
         return list;
+    }
+
+    public double calculateTotalHoursWorked(String userId) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        YearMonth currentMonth = YearMonth.from(currentDateTime);
+
+        double totalHoursWorked = 0.0;
+
+        List<Attendance> attendanceList = attendanceRepo.findAttendanceByUserId(userId);
+
+        for (Attendance attendance : attendanceList) {
+            LocalDateTime checkIn = attendance.getCheckIn();
+            LocalDateTime checkOut = attendance.getCheckOut();
+
+            // Filter check-ins and check-outs within the current month
+            if (checkIn.getMonth() == currentMonth.getMonth() && checkOut.getMonth() == currentMonth.getMonth()) {
+                long hours = ChronoUnit.HOURS.between(checkIn, checkOut);
+                totalHoursWorked += hours;
+            }
+        }
+
+        return totalHoursWorked;
     }
 
     public ResponseDTO delAttendance(){

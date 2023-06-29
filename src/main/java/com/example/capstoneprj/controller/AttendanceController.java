@@ -55,4 +55,10 @@ public class AttendanceController {
     public ResponseEntity<Attendance> testCheckOut(@PathVariable("id") String userId){
         return new ResponseEntity<>(attendanceService.testCheckOut(userId),HttpStatus.OK);
     }
+
+    @GetMapping("/total-hours-worked/{userId}")
+    public double getTotalHoursWorked(@PathVariable String userId) {
+        return attendanceService.calculateTotalHoursWorked(userId);
+    }
+
 }

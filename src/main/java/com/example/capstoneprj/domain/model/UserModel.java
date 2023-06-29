@@ -48,6 +48,8 @@ public class UserModel {
 
     private PayGrade payGrade;
 
+    private Boolean del;
+
 //    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 //    private LocalDateTime followupDate;
 

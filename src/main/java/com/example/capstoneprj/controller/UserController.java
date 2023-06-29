@@ -91,6 +91,11 @@ public class UserController {
         return new ResponseEntity<>(userService.findUser(email,username),HttpStatus.OK);
     }
 
+    @GetMapping("/timkiem")
+    public ResponseEntity<ResponseDTO> timUser(@RequestParam @Nullable String email, @RequestParam @Nullable String lastName, @RequestParam @Nullable String firstName){
+        return new ResponseEntity<>(userService.searchUser(email,lastName, firstName),HttpStatus.OK);
+    }
+
     @PostMapping("/change")
     public ResponseEntity<ResponseDTO> change(@RequestBody BasicInfo userModel){
         return new ResponseEntity<>(userService.changeInfo(userModel),HttpStatus.OK);

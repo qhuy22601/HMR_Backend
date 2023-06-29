@@ -3,7 +3,7 @@ package com.example.capstoneprj.domain.model;
 import lombok.*;
 
 import javax.persistence.Id;
-
+import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,4 +18,7 @@ public class ImageDetails {
     private String content;
 
     private String title;
+
+    private LocalDate createAt;
+
 }

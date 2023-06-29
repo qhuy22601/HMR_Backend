@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import java.time.LocalDate;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,12 +48,10 @@ public class ImageService {
             return ResponseEntity.badRequest().body(null);
         }
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/images/getImage/")
-                .path(fileName)
-                .toUriString();
-
+	//String fileDownloadUri = "http://171.238.155.142:8080/api/images/getImage/" + fileName;	
+	String fileDownloadUri = "/api/images/getImage/" +fileName;
         ImageDetails imageDetails = new ImageDetails();
+	imageDetails.setCreateAt(LocalDate.now());
         imageDetails.setImageUrl(fileDownloadUri);
         imageDetails.setTitle(title);
         imageDetails.setContent(content);
@@ -67,3 +65,4 @@ public class ImageService {
         return Files.readAllBytes(imagePath);
     }
 }
+
